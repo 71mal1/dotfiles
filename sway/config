@@ -1,0 +1,252 @@
+#------------------------------------------------------------------------
+# VARIABLES
+#------------------------------------------------------------------------
+set $mod Mod4
+set $font Monospace 10
+set $term alacritty
+set $lock swaylock -c 000000 -e -F
+set $menu rofi -show run # заменить на wayland bemenu??
+set $appmenu rofi -show drun
+
+set $screenclip_copy slurp | grim -g - - | wl-copy
+set $screenclip_edit slurp | grim -g - - | swappy -f -
+set $screenclip_save slurp | grim -g - ~/Pictures/screenshots/$(date +"%Y-%m-%d-%H-%M-%S").png
+# set $background ~/Pictures/wallpaper/moon.jpg
+
+# Workspaces.
+set $ws1  1
+set $ws2  2
+set $ws3  3
+set $ws4  4
+set $ws5  5
+set $ws6  6
+set $ws7  7
+set $ws8  8
+set $ws9  9
+set $ws10 10
+
+# Start on the first workspace.
+workspace $ws1
+
+#------------------------------------------------------------------------
+# INPUTS
+#------------------------------------------------------------------------
+
+# Keyboard settings.
+input type:keyboard
+{
+    xkb_layout us,ru
+    xkb_options grp:alt_shift_toggle
+}
+
+# Hide mouse cursor after a period of inactivity.
+seat seat0 hide_cursor 3000
+
+#------------------------------------------------------------------------
+# OUTPUTS
+#------------------------------------------------------------------------
+
+output HDMI-A-1
+{
+    mode 1920x1080@74.973Hz 
+}
+
+font pango:$font
+
+bar
+{
+	swaybar_command waybar
+}
+
+#------------------------------------------------------------------------
+# SWAY BEHAVIOUR
+#------------------------------------------------------------------------
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# If an app is in fullscreen and it creates a popup, leave fullscreen.
+popup_during_fullscreen leave_fullscreen
+
+focus_follows_mouse yes
+
+# Set wallpaper
+output * bg #000000 solid_color
+
+# Window borders.
+default_border normal 2
+default_floating_border normal 2
+
+# Mouse pointer moves to the newly-focused output.
+mouse_warping output
+
+hide_edge_borders smart
+smart_borders on
+smart_gaps on
+gaps inner 5
+
+#------------------------------------------------------------------------
+# PROGRAMS TO RUN AT STARTUP
+#------------------------------------------------------------------------
+
+# Idle controls - lock screen after 5 mins, shut off displays after 10 mins.
+exec swayidle -w \
+	timeout 300 'swaylock -f -c 000000 -e -F' \
+	timeout 600 'swaymsg "output * dpms off"' \
+	  resume 'swaymsg "output * dpms on"' \
+	before-sleep 'swaylock -f -c 000000 -e -F'
+
+#------------------------------------------------------------------------
+# KEY BINDINGS FOR APP LAUNCHERS
+#------------------------------------------------------------------------
+
+bindsym $mod+Return exec $term
+bindsym $mod+p exec galculator
+bindsym --release $mod+Print exec $screenclip_save
+bindsym --release $mod+Shift+Print exec $screenclip_copy
+bindsym --release $mod+Ctrl+Shift+Print exec $screenclip_edit
+
+#------------------------------------------------------------------------
+# DEFAULT WORKSPACE/STYLE FOR APPS
+#------------------------------------------------------------------------
+
+# Auto-float these apps.
+for_window [title="galculator"] floating enable
+
+#------------------------------------------------------------------------
+# BRIGHTNESS, VOLUME, AND POWER
+#------------------------------------------------------------------------
+
+
+
+#------------------------------------------------------------------------
+# MISC KEY BINDINGS
+#------------------------------------------------------------------------
+
+bindsym --to-code --locked $mod+Shift+s exec systemctl suspend
+
+#------------------------------------------------------------------------
+# KEY BINDINGS FOR SWAY
+#------------------------------------------------------------------------
+
+# Kill focused window.
+bindsym --to-code $mod+Shift+q kill
+
+bindsym --to-code $mod+Shift+d exec $menu
+bindsym --to-code $mod+d exec $appmenu
+
+# Change focus.
+bindsym --to-code $mod+h focus left
+bindsym --to-code $mod+j focus down
+bindsym --to-code $mod+k focus up
+bindsym --to-code $mod+l focus right
+
+# Move focused window.
+bindsym --to-code $mod+Shift+h move left
+bindsym --to-code $mod+Shift+j move down
+bindsym --to-code $mod+Shift+k move up
+bindsym --to-code $mod+Shift+l move right
+
+# Splits.
+bindsym $mod+bar split h
+bindsym $mod+minus split v
+
+# Toggle split of focused container.
+bindsym --to-code $mod+y layout toggle tabbed split
+
+# Enter fullscreen mode for the focused container.
+bindsym --to-code $mod+f fullscreen
+
+# Change container layout (stacked, tabbed, toggle split).
+bindsym --to-code $mod+s layout stacking
+bindsym --to-code $mod+t layout tabbed
+bindsym --to-code $mod+e layout toggle split
+
+# Toggle between tiling and floating.
+bindsym $mod+Shift+space floating toggle
+
+# Change focus between tiling and floating windows.
+bindsym $mod+space focus mode_toggle
+
+# Focus the parent container.
+bindsym --to-code $mod+a focus parent
+# Focus a child container.
+bindsym --to-code $mod+c focus child
+
+# Switch to workspace.
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+
+# Move focused container to workspace.
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+# Quick toggle between two most recent workspaces.
+bindsym $mod+Tab workspace back_and_forth
+
+# Reload the configuration file.
+bindsym --to-code $mod+Shift+c reload
+
+# Exit.
+bindsym --to-code $mod+Shift+e exec swaynag -t warning -m 'Are you sure you want to exit?' -b 'Yes, exit' 'swaymsg exit'
+
+# Lock session.
+bindsym $mod+BackSpace exec $lock
+
+#------------------------------------------------------------------------
+# OTHER MODES
+#------------------------------------------------------------------------
+
+# Resize window (you can also use the mouse for that).
+mode "resize" {
+	# These bindings trigger as soon as you enter the resize mode
+
+	# Pressing left will shrink the window's width.
+	# Pressing right will grow the window's width.
+	# Pressing up will shrink the window's height.
+	# Pressing down will grow the window's height.
+	bindsym --to-code  h resize shrink width 10 px or 5 ppt
+	bindsym --to-code j resize grow height 10 px or 5 ppt
+	bindsym --to-code k resize shrink height 10 px or 5 ppt
+	bindsym --to-code l resize grow width 10 px or 5 ppt
+
+	# same bindings, but for the arrow keys
+	bindsym Left resize shrink width 10 px or 5 ppt
+	bindsym Down resize grow height 10 px or 5 ppt
+	bindsym Up resize shrink height 10 px or 5 ppt
+	bindsym Right resize grow width 10 px or 5 ppt
+
+	# back to normal: Enter or Escape
+	bindsym Return mode "defaulвt"
+	bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# Move window to a different monitor, maintaining focus on the current window
+# after it moves to the new output
+mode "move" {
+	bindsym --to-code h move container to output left, workspace back_and_forth
+	bindsym --to-code j move container to output up, workspace back_and_forth
+	bindsym --to-code k move container to output down, workspace back_and_forth
+	bindsym --to-code l move container to output right, workspace back_and_forth
+
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+bindsym $mod+m mode "move"
