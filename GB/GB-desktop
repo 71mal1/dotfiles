@@ -1,0 +1,22 @@
+windows		|								| result
+CPU		--	https://browser.geekbench.com/v6/cpu/6086177		| s2047	m8342
+	   									| 
+GPU Vulkan	--	https://browser.geekbench.com/v6/compute/2179527	| 83701
+GPU CL		--	https://browser.geekbench.com/v6/compute/2179521	| 73431
+
+#################################################
+
+hackintosh
+CPU             --	https://browser.geekbench.com/v6/cpu/5910721		| s1951 m7645
+										|
+GPU cl     	--	https://browser.geekbench.com/v6/compute/2118982	| 14559
+GPU metal	--	https://browser.geekbench.com/v6/compute/2118973	| 108973
+
+#################################################
+
+linux										|
+windows										|
+CPU             --								|
+										|
+GPU Vulkan      --								|
+GPU GL          --								|
