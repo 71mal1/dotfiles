@@ -1,0 +1,36 @@
+general {
+        colors = true
+        interval = 5
+}
+
+order += "battery all"
+order += "volume master"
+order += "memory"
+order += "tztime local"
+
+
+battery all {
+        format = "%status %percentage %remaining"
+        status_chr = "🔌"
+        status_bat = "🔋"
+        status_unk = "🚫🚫🚫"
+        status_full = "💯"
+}
+
+memory {
+        format = " U: %used - A: %available "
+        threshold_degraded = "1G"
+        format_degraded = "MEMORY < %available"
+}
+
+tztime local {
+        format = "%H:%M %d-%m"
+}
+
+volume master {
+        format = "🔊: %volume"
+        format_muted = "🔇: muted (%volume)"
+        device = "default"
+        mixer = "Master"
+        mixer_idx = 0
+}
