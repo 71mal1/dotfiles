@@ -51,6 +51,7 @@ font pango:$font
 
 bar {
         status_command i3status
+	position top
 }
 
 #------------------------------------------------------------------------

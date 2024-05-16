@@ -1,13 +1,14 @@
 general {
         colors = true
-        interval = 5
+        interval = 1
 }
 
-order += "battery all"
+# order += "battery all"
 order += "volume master"
+order += "cpu_usage"
 order += "memory"
+order += "cpu_temperature 0"
 order += "tztime local"
-
 
 battery all {
         format = "%status %percentage %remaining"
@@ -18,19 +19,30 @@ battery all {
 }
 
 memory {
-        format = " U: %used - A: %available "
-        threshold_degraded = "1G"
+        # format = " U: %used - A: %available "
+        format = " 💾 :%used "
+	threshold_degraded = "1G"
         format_degraded = "MEMORY < %available"
 }
 
 tztime local {
-        format = "%H:%M %d-%m"
+    format = " 🕒 %I:%M%p %d.%m"
 }
 
 volume master {
-        format = "🔊: %volume"
+#        format = "🔊: %volume"
+	format = "🔊:%volume "
         format_muted = "🔇: muted (%volume)"
         device = "default"
         mixer = "Master"
         mixer_idx = 0
+}
+
+cpu_usage {
+        format = " 🖥️ :%usage "
+}
+
+cpu_temperature 0 {
+    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon4/temp1_input"
+    format = " 🌡️:%degrees°C "
 }
